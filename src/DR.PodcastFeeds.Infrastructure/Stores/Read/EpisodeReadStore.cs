@@ -17,97 +17,58 @@ public class EpisodeReadStore(
     public async Task<IEnumerable<Episode>> GetEpisodes(string? name = null)
     {
         var nameFilter = GetNameFilter(name);
-
-        var episodes = await Collection.Aggregate()
-            .Match(nameFilter)
-            .Unwind<PodcastRecord, EpisodeRecord>(podcast => podcast.Episodes)
-            .Project<EpisodeRecord>(EpisodeRecordProjection)
-            .ToListAsync();
-
-        if (episodes == null || episodes.Count == 0)
-        {
-            logger.LogInformation("No episodes found");
-
-            return Enumerable.Empty<Episode>();
-        }
-
-        logger.LogInformation("Found {EpisodeCount} episodes", episodes.Count);
-
-        return episodes.Select(episode => episode.ToDomain(episode.Podcast));
+        return await GetEpisodesCore(nameFilter);
     }
-
 
     public async Task<IEnumerable<Episode>> GetEpisodes(DateOnly fromDate, DateOnly toDate, string? name = null)
     {
         var nameFilter = GetNameFilter(name);
-
         var dateFilter = GetTimeRangeFilter(fromDate, toDate);
 
-        var episodes = await Collection.Aggregate()
-            .Match(nameFilter)
-            .Unwind<PodcastRecord, EpisodeRecord>(podcast => podcast.Episodes)
-            .Match(dateFilter)
-            .Project<EpisodeRecord>(EpisodeRecordProjection)
-            .ToListAsync();
-        
-        if (episodes == null || episodes.Count == 0)
-        {
-            logger.LogInformation("No episodes found");
-
-            return Enumerable.Empty<Episode>();
-        }
-        
-        logger.LogInformation("Found {EpisodeCount} episodes", episodes.Count);
-
-        return episodes.Select(episode => episode.ToDomain(episode.Podcast));
+        var combinedFilter = Builders<PodcastRecord>.Filter.And(nameFilter, dateFilter);
+        return await GetEpisodesCore(combinedFilter);
     }
-
 
     public async Task<IEnumerable<Episode>> GetEpisodes(int lastCount, string? name = null)
     {
         var filter = GetNameFilter(name);
-        
-        var episodes = await Collection.Aggregate()
-            .Match(filter)
-            .Unwind<PodcastRecord, EpisodeRecord>(podcast => podcast.Episodes)
-            .Limit(lastCount)
-            .Project<EpisodeRecord>(EpisodeRecordProjection)
-            .ToListAsync();
-        
-        if (episodes == null || episodes.Count == 0)
-        {
-            logger.LogInformation("No episodes found");
-
-            return Enumerable.Empty<Episode>();
-        }
-        
-        logger.LogInformation("Found {EpisodeCount} episodes", episodes.Count);
-        
-        return episodes.Select(episode => episode.ToDomain(episode.Podcast));
+        return await GetEpisodesCore(filter, limit: lastCount);
     }
 
     public async Task<IEnumerable<Episode>> GetEpisodes(int pageNumber, int pageSize, string? name = null)
     {
         var nameFilter = GetNameFilter(name);
-        
-        var episodes = await Collection.Aggregate()
-            .Match(nameFilter)
+        var skip = (pageNumber - 1) * pageSize;
+        return await GetEpisodesCore(nameFilter, skip, pageSize);
+    }
+    
+    private async Task<IEnumerable<Episode>> GetEpisodesCore(FilterDefinition<PodcastRecord> filter, int skip = 0, int limit = 0)
+    {
+        var query = Collection.Aggregate()
+            .Match(filter)
             .Unwind<PodcastRecord, EpisodeRecord>(podcast => podcast.Episodes)
-            .Skip((pageNumber - 1) * pageSize)
-            .Limit(pageSize)
-            .Project<EpisodeRecord>(EpisodeRecordProjection)
-            .ToListAsync();
-        
-        if (episodes == null || episodes.Count == 0)
+            .Skip(skip);
+
+        if (limit > 0) query = query.Limit(limit);
+
+        query = query.Project<EpisodeRecord>(EpisodeRecordProjection);
+
+        var episodes = await query.ToListAsync();
+
+        return ProcessEpisodes(episodes);
+    }
+
+    private IEnumerable<Episode> ProcessEpisodes(IEnumerable<EpisodeRecord>? episodes)
+    {
+        var episodeRecords = episodes?.ToList();
+        if (episodeRecords == null || episodeRecords.Count == 0)
         {
             logger.LogInformation("No episodes found");
-
             return Enumerable.Empty<Episode>();
         }
-        
-        logger.LogInformation("Found {EpisodeCount} episodes", episodes.Count);
-        
-        return episodes.Select(episode => episode.ToDomain(episode.Podcast));
+
+        logger.LogInformation("Found {EpisodeCount} episodes", episodeRecords.Count);
+        return episodeRecords.Select(episode => episode.ToDomain(episode.Podcast));
     }
 
     private static FilterDefinition<PodcastRecord> GetNameFilter(string? name)
@@ -117,9 +78,7 @@ public class EpisodeReadStore(
         if (string.IsNullOrWhiteSpace(name)) return filter;
 
         var regex = new Regex(name, RegexOptions.IgnoreCase);
-        filter = Builders<PodcastRecord>.Filter.Regex(podcast => podcast.Name, regex);
-
-        return filter;
+        return Builders<PodcastRecord>.Filter.Regex(podcast => podcast.Name, regex);
     }
 
     private static BsonDocument GetTimeRangeFilter(DateOnly fromDate, DateOnly toDate)
