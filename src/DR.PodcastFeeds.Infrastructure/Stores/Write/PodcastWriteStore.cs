@@ -45,6 +45,13 @@ public class PodcastWriteStore(
         return false;
     }
 
+    public async Task<bool> Remove(string name)
+    {
+        var filter = Builders<PodcastRecord>.Filter.Eq(podcast => podcast.Name, name);
+        
+        return await Collection.DeleteOneAsync(filter).ContinueWith(task => task.Result.DeletedCount > 0);
+    }
+
     private static bool IsRecordChanged(PodcastRecord existingRecord, PodcastRecord newRecord)
     {
         return existingRecord.Title != newRecord.Title ||
