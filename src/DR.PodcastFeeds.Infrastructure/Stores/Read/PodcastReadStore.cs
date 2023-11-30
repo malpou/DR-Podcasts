@@ -33,12 +33,21 @@ public class PodcastReadStore(
         return true;
     }
 
-    public Task<Podcast> Get(string name, bool includeEpisodes = false)
+    public Task<IEnumerable<Podcast>> GetAll(string? category = null)
     {
-        throw new NotImplementedException();
-    }
+        var filter = Builders<PodcastRecord>.Filter.Empty;
 
-    
+        if (!string.IsNullOrWhiteSpace(category))
+        {
+            var regex = new Regex(category, RegexOptions.IgnoreCase);
+
+            filter = Builders<PodcastRecord>.Filter.Regex(podcast => podcast.CategorySlug, regex);
+        }
+
+        var podcasts = Collection.Find(filter).ToList();
+
+        return Task.FromResult(podcasts.Select(podcast => podcast.ToDomain()));
+    }
 
     public async Task<IEnumerable<Podcast>> GetAll(bool includeEpisodes = false)
     {

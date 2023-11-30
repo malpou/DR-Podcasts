@@ -5,4 +5,5 @@ public record EpisodesResponse(
     string PodcastDescription,
     string PodcastImageUrl,
     string PodcastCategory,
+    string PodcastLink,
     List<EpisodeResponse> Episodes);

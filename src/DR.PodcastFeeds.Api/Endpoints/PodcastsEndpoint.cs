@@ -1,9 +1,15 @@
-﻿namespace DR.PodcastFeeds.Api.Endpoints;
+﻿using DR.PodcastFeeds.Api.Extensions;
+using DR.PodcastFeeds.Application.Podcast.Queries;
+using MediatR;
+
+namespace DR.PodcastFeeds.Api.Endpoints;
 
 public static class PodcastsEndpoint
 {
-    public static async Task<IResult> Handle()
+    public static async Task<IResult> Handle(ISender sender)
     {
-        return Results.Ok();
+        var podcasts = await sender.Send(new GetPodcastsQuery());
+        
+        return Results.Ok(podcasts.ToResponses());
     }
 }

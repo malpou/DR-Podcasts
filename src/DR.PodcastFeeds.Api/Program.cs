@@ -51,7 +51,7 @@ app.MapDelete(podcastsPath, DeletePodcastEndpoint.Handle)
     .WithTags("Podcasts");
 
 // Episodes Endpoints
-app.MapGet($"{podcastsPath}/{{name}}/{episodesPath}", EpisodesEndpoint.Handle)
+app.MapGet($"{podcastsPath}/{{name}}/{episodesPath}", EpisodesByPodcastEndpoint.Handle)
     .WithTags("Episodes")
     .WithDescription("Get episodes for a podcast")
     .Produces<EpisodesResponse>();

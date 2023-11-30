@@ -21,7 +21,8 @@ public class PodcastRecord
 
     public DateTime Updated { get; set; } = DateTime.UtcNow;
 
-    public EpisodeRecord[] Episodes { get; set; } = null!;
+    [BsonIgnoreIfNull]
+    public EpisodeRecord[]? Episodes { get; set; }
 }
 
 public static class PodcastRecordExtensions
@@ -38,13 +39,9 @@ public static class PodcastRecordExtensions
                 podcastRecord.CategorySlug
             ),
             link: podcastRecord.Link,
-            episodes: podcastRecord.Episodes.Select(episodeRecord => new Episode(
-                episodeRecord.Id,
-                episodeRecord.Title,
-                episodeRecord.Description,
-                episodeRecord.Duration,
-                episodeRecord.PublishingDate
-            )).ToList()
+            episodes: podcastRecord.Episodes?
+                .Select(episodeRecord => episodeRecord.ToDomain())
+                .ToList() ?? null
         );
     }
 
@@ -59,14 +56,9 @@ public static class PodcastRecordExtensions
             Category = podcast.Category.Name,
             CategorySlug = podcast.Category.Slug,
             Link = podcast.Link,
-            Episodes = podcast.Episodes.Select(episode => new EpisodeRecord
-            {
-                Id = episode.Id,
-                Title = episode.Title,
-                Description = episode.Description,
-                Duration = episode.Duration,
-                PublishingDate = episode.PublishingDate
-            }).ToArray()
+            Episodes = podcast.Episodes
+                .Select(episode => episode.ToRecord())
+                .ToArray()
         };
     }
 }

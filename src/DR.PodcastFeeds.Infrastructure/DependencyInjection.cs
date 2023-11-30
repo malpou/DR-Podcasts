@@ -30,8 +30,6 @@ public static class DependencyInjection
     {
         services.Configure<MongoDbSettings>(
             configuration.GetSection(nameof(MongoDbSettings)));
-
-        
         
         var mongoUrlBuilder = new MongoUrlBuilder(configuration["MongoDbSettings:ConnectionString"] + "/jobs");
         var mongoClient = new MongoClient(mongoUrlBuilder.ToMongoUrl());
@@ -53,6 +51,8 @@ public static class DependencyInjection
 
         services.AddSingleton<ICategoryReadStore, CategoryReadStore>();
         services.AddSingleton<IPodcastReadStore, PodcastReadStore>();
+        services.AddSingleton<IEpisodeReadStore, EpisodeReadStore>();
+        
         services.AddSingleton<IPodcastWriteStore, PodcastWriteStore>();
     }
 }
