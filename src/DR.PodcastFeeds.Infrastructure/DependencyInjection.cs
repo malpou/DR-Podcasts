@@ -51,6 +51,7 @@ public static class DependencyInjection
         });
         services.AddHangfireServer();
 
+        services.AddSingleton<ICategoryReadStore, CategoryReadStore>();
         services.AddSingleton<IPodcastReadStore, PodcastReadStore>();
         services.AddSingleton<IPodcastWriteStore, PodcastWriteStore>();
     }
