@@ -48,7 +48,7 @@ public class EpisodeReadStore(
         var dateFilter = GetTimeRangeFilter(fromDate, toDate);
 
         var combinedFilter = Builders<PodcastRecord>.Filter.And(nameFilter, dateFilter);
-        return await GetEpisodesCore(combinedFilter);
+        return await GetEpisodesCore(nameFilter, dateFilter: dateFilter);
     }
 
     public async Task<IEnumerable<Episode>> GetEpisodes(int lastCount, string? name = null)
@@ -65,11 +65,12 @@ public class EpisodeReadStore(
     }
 
     private async Task<IEnumerable<Episode>> GetEpisodesCore(FilterDefinition<PodcastRecord> filter, int skip = 0,
-        int limit = 0)
+        int limit = 0, FilterDefinition<EpisodeRecord>? dateFilter = null)
     {
         var query = Collection.Aggregate()
             .Match(filter)
             .Unwind<PodcastRecord, EpisodeRecord>(podcast => podcast.Episodes)
+            .Match(dateFilter ?? Builders<EpisodeRecord>.Filter.Empty)
             .Skip(skip);
 
         if (limit > 0) query = query.Limit(limit);
