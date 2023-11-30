@@ -7,7 +7,7 @@ namespace DR.PodcastFeeds.Application.Categories.Queries.Handlers;
 
 public class GetCategoriesQueryHandler(
     ICategoryReadStore categoryReadStore,
-    ILogger<GetCategoriesQueryHandler> logger)  : IRequestHandler<GetCategoriesQuery, IEnumerable<Category>>
+    ILogger<GetCategoriesQueryHandler> logger) : IRequestHandler<GetCategoriesQuery, IEnumerable<Category>>
 {
     public async Task<IEnumerable<Category>> Handle(GetCategoriesQuery request, CancellationToken cancellationToken)
     {

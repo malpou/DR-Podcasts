@@ -49,8 +49,5 @@ public class Item
     [XmlElement(ElementName = "description")]
     public string Description { get; set; } = null!;
 
-    [XmlElement(ElementName = "duration", Namespace = "itunes")]
-    public string Duration { get; set; } = null!;
-
     [XmlElement(ElementName = "pubDate")] public string PubDate { get; set; } = null!;
 }

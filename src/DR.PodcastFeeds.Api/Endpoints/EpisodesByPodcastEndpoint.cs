@@ -26,8 +26,8 @@ public static class EpisodesByPodcastEndpoint
         var episodes = await sender.Send(new GetEpisodesQuery(name, page, size, from, to, last));
 
         var episodesList = episodes.ToList();
-        return !episodesList.Any() 
-            ? Results.NotFound() 
+        return !episodesList.Any()
+            ? Results.NotFound()
             : Results.Ok(episodesList.ToResponse());
     }
 }

@@ -10,4 +10,4 @@ public record GetEpisodesQuery(
     DateOnly? FromDate,
     DateOnly? ToDate,
     int? Last
-     ): IRequest<IEnumerable<Episode>>;
+) : IRequest<IEnumerable<Episode>>;

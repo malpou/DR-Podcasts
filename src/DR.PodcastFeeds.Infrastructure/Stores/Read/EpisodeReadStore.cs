@@ -14,6 +14,28 @@ public class EpisodeReadStore(
     ILogger<EpisodeReadStore> logger) : MongoDbStoreBase<PodcastRecord>(settings, settings.Value.PodcastCollectionName),
     IEpisodeReadStore
 {
+    private static readonly BsonDocument EpisodeRecordProjection = new()
+    {
+        {
+            "Podcast", new BsonDocument
+            {
+                {"_id", "$_id"},
+                {"Title", "$Title"},
+                {"Description", "$Description"},
+                {"Category", "$Category"},
+                {"Updated", "$Updated"},
+                {"CategorySlug", "$CategorySlug"},
+                {"ImageUrl", "$ImageUrl"},
+                {"Link", "$Link"}
+            }
+        },
+        {"_id", "$Episodes._id"},
+        {"Title", "$Episodes.Title"},
+        {"Description", "$Episodes.Description"},
+        {"Duration", "$Episodes.Duration"},
+        {"PublishingDate", "$Episodes.PublishingDate"}
+    };
+
     public async Task<IEnumerable<Episode>> GetEpisodes(string? name = null)
     {
         var nameFilter = GetNameFilter(name);
@@ -41,8 +63,9 @@ public class EpisodeReadStore(
         var skip = (pageNumber - 1) * pageSize;
         return await GetEpisodesCore(nameFilter, skip, pageSize);
     }
-    
-    private async Task<IEnumerable<Episode>> GetEpisodesCore(FilterDefinition<PodcastRecord> filter, int skip = 0, int limit = 0)
+
+    private async Task<IEnumerable<Episode>> GetEpisodesCore(FilterDefinition<PodcastRecord> filter, int skip = 0,
+        int limit = 0)
     {
         var query = Collection.Aggregate()
             .Match(filter)
@@ -97,26 +120,4 @@ public class EpisodeReadStore(
         });
         return dateFilter;
     }
-
-    private static readonly BsonDocument EpisodeRecordProjection = new()
-    {
-        {
-            "Podcast", new BsonDocument
-            {
-                {"_id", "$_id"},
-                {"Title", "$Title"},
-                {"Description", "$Description"},
-                {"Category", "$Category"},
-                {"Updated", "$Updated"},
-                {"CategorySlug", "$CategorySlug"},
-                {"ImageUrl", "$ImageUrl"},
-                {"Link", "$Link"}
-            }
-        },
-        {"_id", "$Episodes._id"},
-        {"Title", "$Episodes.Title"},
-        {"Description", "$Episodes.Description"},
-        {"Duration", "$Episodes.Duration"},
-        {"PublishingDate", "$Episodes.PublishingDate"}
-    };
 }

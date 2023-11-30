@@ -21,8 +21,7 @@ public class PodcastRecord
 
     public DateTime Updated { get; set; } = DateTime.UtcNow;
 
-    [BsonIgnoreIfNull]
-    public EpisodeRecord[]? Episodes { get; set; }
+    [BsonIgnoreIfNull] public EpisodeRecord[]? Episodes { get; set; }
 }
 
 public static class PodcastRecordExtensions

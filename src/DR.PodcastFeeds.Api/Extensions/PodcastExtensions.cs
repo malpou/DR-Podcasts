@@ -12,6 +12,7 @@ public static class PodcastExtensions
 
     private static PodcastResponse ToResponse(this Podcast podcast)
     {
-        return new PodcastResponse(podcast.Name, podcast.Title, podcast.Description, podcast.ImageUrl, podcast.Category.Name);
+        return new PodcastResponse(podcast.Name, podcast.Title, podcast.Description, podcast.ImageUrl,
+            podcast.Category.Name);
     }
 }

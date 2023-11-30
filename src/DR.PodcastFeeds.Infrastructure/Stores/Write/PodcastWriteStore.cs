@@ -48,7 +48,7 @@ public class PodcastWriteStore(
     public async Task<bool> Remove(string name)
     {
         var filter = Builders<PodcastRecord>.Filter.Eq(podcast => podcast.Name, name);
-        
+
         return await Collection.DeleteOneAsync(filter).ContinueWith(task => task.Result.DeletedCount > 0);
     }
 

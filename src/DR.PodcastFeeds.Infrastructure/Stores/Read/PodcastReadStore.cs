@@ -12,7 +12,7 @@ public class PodcastReadStore(
         IOptions<MongoDbSettings> settings,
         ILogger<PodcastReadStore> logger)
     :
-        MongoDbStoreBase<PodcastRecord>(settings, settings.Value.PodcastCollectionName), 
+        MongoDbStoreBase<PodcastRecord>(settings, settings.Value.PodcastCollectionName),
         IPodcastReadStore
 {
     public async Task<bool> Exists(string name)

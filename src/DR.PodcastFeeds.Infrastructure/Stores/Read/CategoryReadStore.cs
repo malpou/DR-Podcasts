@@ -6,9 +6,9 @@ using MongoDB.Driver;
 
 namespace DR.PodcastFeeds.Infrastructure.Stores.Read;
 
-public class CategoryReadStore(IOptions<MongoDbSettings> settings) 
-    : MongoDbStoreBase<PodcastRecord>(settings, settings.Value.PodcastCollectionName), 
-    ICategoryReadStore
+public class CategoryReadStore(IOptions<MongoDbSettings> settings)
+    : MongoDbStoreBase<PodcastRecord>(settings, settings.Value.PodcastCollectionName),
+        ICategoryReadStore
 {
     public async Task<IEnumerable<Category>> GetCategories()
     {
@@ -19,7 +19,7 @@ public class CategoryReadStore(IOptions<MongoDbSettings> settings)
             ))
             .SortBy(category => category.Name)
             .ToListAsync();
-        
+
         return categories;
     }
 }

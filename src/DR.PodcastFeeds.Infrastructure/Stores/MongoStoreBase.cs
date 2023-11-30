@@ -9,7 +9,10 @@ public abstract class MongoDbStoreBase<TRecord>
 
     protected MongoDbStoreBase(IOptions<MongoDbSettings> settings, string collectionName)
     {
-        var client = new MongoClient(settings.Value.ConnectionString);
+        var clientSettings = MongoClientSettings.FromConnectionString(settings.Value.ConnectionString);
+        clientSettings.ServerApi = new ServerApi(ServerApiVersion.V1);
+
+        var client = new MongoClient(clientSettings);
         var database = client.GetDatabase(settings.Value.DatabaseName);
         Collection = database.GetCollection<TRecord>(collectionName);
     }

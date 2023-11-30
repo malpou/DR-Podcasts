@@ -4,12 +4,10 @@ using DR.PodcastFeeds.Infrastructure.Stores;
 using DR.PodcastFeeds.Infrastructure.Stores.Read;
 using DR.PodcastFeeds.Infrastructure.Stores.Write;
 using Hangfire;
-using Hangfire.Mongo;
-using Hangfire.Mongo.Migration.Strategies;
-using Hangfire.Mongo.Migration.Strategies.Backup;
+using Hangfire.Redis.StackExchange;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MongoDB.Driver;
+using StackExchange.Redis;
 
 namespace DR.PodcastFeeds.Infrastructure;
 
@@ -30,29 +28,16 @@ public static class DependencyInjection
     {
         services.Configure<MongoDbSettings>(
             configuration.GetSection(nameof(MongoDbSettings)));
-        
-        var mongoUrlBuilder = new MongoUrlBuilder(configuration["MongoDbSettings:ConnectionString"] + "/jobs");
-        var mongoClient = new MongoClient(mongoUrlBuilder.ToMongoUrl());
 
-        services.AddHangfire(config =>
-        {
-            config.UseMongoStorage(mongoClient, mongoUrlBuilder.DatabaseName, new MongoStorageOptions
-            {
-                MigrationOptions = new MongoMigrationOptions
-                {
-                    MigrationStrategy = new MigrateMongoMigrationStrategy(),
-                    BackupStrategy = new CollectionMongoBackupStrategy()
-                },
-                CheckConnection = true,
-                CheckQueuedJobsStrategy = CheckQueuedJobsStrategy.Poll
-            });
-        });
+        var redis = ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis")!);
+
+        services.AddHangfire(config => { config.UseRedisStorage(redis); });
         services.AddHangfireServer();
 
         services.AddSingleton<ICategoryReadStore, CategoryReadStore>();
         services.AddSingleton<IPodcastReadStore, PodcastReadStore>();
         services.AddSingleton<IEpisodeReadStore, EpisodeReadStore>();
-        
+
         services.AddSingleton<IPodcastWriteStore, PodcastWriteStore>();
     }
 }

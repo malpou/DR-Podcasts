@@ -9,7 +9,7 @@ public static class PodcastsEndpoint
     public static async Task<IResult> Handle(ISender sender)
     {
         var podcasts = await sender.Send(new GetPodcastsQuery());
-        
+
         return Results.Ok(podcasts.ToResponses());
     }
 }

@@ -3,4 +3,4 @@ using MediatR;
 
 namespace DR.PodcastFeeds.Application.Categories.Queries;
 
-public record GetCategoriesQuery() : IRequest<IEnumerable<Category>>;
+public record GetCategoriesQuery : IRequest<IEnumerable<Category>>;
