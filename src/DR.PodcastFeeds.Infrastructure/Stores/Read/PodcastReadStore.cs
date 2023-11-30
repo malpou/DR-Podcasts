@@ -1,32 +1,46 @@
-﻿using DR.PodcastFeeds.Domain;
-using DR.PodcastFeeds.Infrastructure.DbRecords;
+﻿using DR.PodcastFeeds.Application.Interfaces;
+using DR.PodcastFeeds.Domain;
+using DR.PodcastFeeds.Infrastructure.Stores.DbRecords;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace DR.PodcastFeeds.Infrastructure.Stores.Read;
 
-public class PodcastReadStore : IPodcastReadStore
+public class PodcastReadStore(
+        IOptions<MongoDbSettings> settings,
+        ILogger<PodcastReadStore> logger)
+    :
+        MongoDbStoreBase<PodcastRecord>(settings, settings.Value.PodcastCollectionName), 
+        IPodcastReadStore
 {
-    private readonly IMongoCollection<PodcastRecord> _podcasts;
-    
-    public PodcastReadStore(IOptions<PodcastStoreDatabaseSettings> settings)
-    {
-        var client = new MongoClient(settings.Value.ConnectionString);
-        
-        var database = client.GetDatabase(settings.Value.DatabaseName);
-        
-        _podcasts = database.GetCollection<PodcastRecord>(settings.Value.PodcastCollectionName);
-    }
-    
-    public Task<bool> Exists(string name)
+    public async Task<bool> Exists(string name)
     {
         var filter = Builders<PodcastRecord>.Filter.Eq(podcast => podcast.Name, name);
-        
-        return _podcasts.Find(filter).AnyAsync();
+
+        var podcast = await Collection.Find(filter).FirstOrDefaultAsync();
+
+        if (podcast == null)
+        {
+            logger.LogInformation("Podcast {PodcastName} does not exist", name);
+
+            return false;
+        }
+
+        logger.LogInformation("Podcast {PodcastName} exists", name);
+
+        return true;
     }
 
     public Task<Podcast> Get(string name, bool includeEpisodes = false)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<IEnumerable<Podcast>> GetAll(bool includeEpisodes = false)
+    {
+        var podcasts = await Collection.Find(_ => true).ToListAsync();
+
+        return podcasts.Select(podcast => podcast.ToDomain());
     }
 }

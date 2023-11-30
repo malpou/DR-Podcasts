@@ -1,4 +1,6 @@
-﻿namespace DR.PodcastFeeds.Application.Podcast.Commands;
+﻿using MediatR;
 
-public record AddPodcastCommand(string Name) 
+namespace DR.PodcastFeeds.Application.Podcast.Commands;
+
+public record AddPodcastCommand(string Name)
     : IRequest<(bool, string)>;

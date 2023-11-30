@@ -7,13 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Hangfire.Core" Version="1.8.6" />
-      <PackageReference Include="MediatR" Version="12.2.0" />
-      <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+        <PackageReference Include="Hangfire.AspNetCore" Version="1.8.6"/>
+        <PackageReference Include="MediatR" Version="12.2.0"/>
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DR.PodcastFeeds.Domain\DR.PodcastFeeds.Domain.csproj" />
+        <ProjectReference Include="..\DR.PodcastFeeds.Domain\DR.PodcastFeeds.Domain.csproj"/>
     </ItemGroup>
 
 </Project>

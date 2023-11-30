@@ -2,4 +2,4 @@
 
 namespace DR.PodcastFeeds.Application.Podcast.Commands;
 
-public record DeletePodcastCommand(string Name) : IRequest<(bool, string)>;
+public record UpdatePodcastsCommand : IRequest;

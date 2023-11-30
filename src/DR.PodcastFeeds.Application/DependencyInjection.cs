@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using DR.PodcastFeeds.Application.Podcast.Jobs;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DR.PodcastFeeds.Application;
 
@@ -8,5 +9,7 @@ public static class DependencyInjection
     {
         services.AddMediatR(configuration =>
             configuration.RegisterServicesFromAssemblyContaining(typeof(DependencyInjection)));
+
+        services.AddScoped<PodcastUpdateScheduler>();
     }
 }

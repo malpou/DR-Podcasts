@@ -1,6 +1,6 @@
 ﻿namespace DR.PodcastFeeds.Infrastructure.Stores;
 
-public class PodcastStoreDatabaseSettings
+public class MongoDbSettings
 {
     public string ConnectionString { get; set; } = null!;
 
@@ -8,4 +8,5 @@ public class PodcastStoreDatabaseSettings
 
     public string PodcastCollectionName { get; set; } = null!;
 
+    public string UserCollectionName { get; set; } = null!;
 }

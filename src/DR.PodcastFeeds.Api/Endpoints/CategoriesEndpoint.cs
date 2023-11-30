@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-
-namespace DR.PodcastFeeds.Api.Endpoints;
+﻿namespace DR.PodcastFeeds.Api.Endpoints;
 
 public static class CategoriesEndpoint
 {

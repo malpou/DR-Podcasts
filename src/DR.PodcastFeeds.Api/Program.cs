@@ -1,8 +1,8 @@
 using DR.PodcastFeeds.Api.Endpoints;
 using DR.PodcastFeeds.Application;
+using DR.PodcastFeeds.Application.Podcast.Jobs;
 using DR.PodcastFeeds.Contracts;
 using DR.PodcastFeeds.Infrastructure;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,11 +56,12 @@ app.MapGet($"{podcastsPath}/{{name}}/{episodesPath}", EpisodesEndpoint.Handle)
     .WithDescription("Get episodes for a podcast")
     .Produces<EpisodesResponse>();
 
-// Feed Endpoints (needs some sort of security)
-
-
 // Login Endpoints
 app.MapPost(loginPath, LoginEndpoint.Handle)
     .WithTags("Login");
+
+using var scope = app.Services.CreateScope();
+var podcastUpdateScheduler = scope.ServiceProvider.GetRequiredService<PodcastUpdateScheduler>();
+podcastUpdateScheduler.SchedulePodcastUpdates();
 
 app.Run();

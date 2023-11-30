@@ -7,12 +7,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DR.PodcastFeeds.Application\DR.PodcastFeeds.Application.csproj" />
+        <ProjectReference Include="..\DR.PodcastFeeds.Application\DR.PodcastFeeds.Application.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
-      <PackageReference Include="MongoDB.Driver" Version="2.22.0" />
+        <PackageReference Include="Hangfire.AspNetCore" Version="1.8.6"/>
+        <PackageReference Include="Hangfire.Mongo" Version="1.9.15"/>
+        <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0"/>
+        <PackageReference Include="MongoDB.Driver" Version="2.22.0"/>
     </ItemGroup>
 
 </Project>
