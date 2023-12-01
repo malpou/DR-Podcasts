@@ -32,7 +32,6 @@ public class EpisodeReadStore(
         {"_id", "$Episodes._id"},
         {"Title", "$Episodes.Title"},
         {"Description", "$Episodes.Description"},
-        {"Duration", "$Episodes.Duration"},
         {"PublishingDate", "$Episodes.PublishingDate"}
     };
 
