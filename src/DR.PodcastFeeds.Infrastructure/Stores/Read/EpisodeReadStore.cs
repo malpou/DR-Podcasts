@@ -32,7 +32,8 @@ public class EpisodeReadStore(
         {"_id", "$Episodes._id"},
         {"Title", "$Episodes.Title"},
         {"Description", "$Episodes.Description"},
-        {"PublishingDate", "$Episodes.PublishingDate"}
+        {"PublishingDate", "$Episodes.PublishingDate"},
+        {"AudioUrl", "$Episodes.AudioUrl"}
     };
 
     public async Task<IEnumerable<Episode>> GetEpisodes(string? name = null)

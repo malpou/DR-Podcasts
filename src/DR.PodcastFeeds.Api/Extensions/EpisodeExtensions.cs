@@ -25,6 +25,7 @@ public static class EpisodeExtensions
                 episode.Title,
                 episode.PublishingDate,
                 episode.Description,
+                episode.AudioUrl,
                 podcastTitle,
                 podcastImageUrl);
     }

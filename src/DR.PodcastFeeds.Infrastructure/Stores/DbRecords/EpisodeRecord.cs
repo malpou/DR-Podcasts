@@ -12,6 +12,8 @@ public class EpisodeRecord
     public string Description { get; set; } = null!;
 
     public DateTime PublishingDate { get; set; }
+    
+    public string AudioUrl { get; set; } = null!;
 
     [BsonIgnoreIfNull] public PodcastRecord? Podcast { get; set; } = null!;
 }
@@ -25,6 +27,7 @@ public static class EpisodeRecordExtensions
             episodeRecord.Title,
             episodeRecord.Description,
             episodeRecord.PublishingDate,
+            episodeRecord.AudioUrl,
             podcastRecord?.ToDomain());
     }
 
@@ -35,6 +38,7 @@ public static class EpisodeRecordExtensions
             Id = episode.Id,
             Title = episode.Title,
             Description = episode.Description,
+            AudioUrl = episode.AudioUrl,
             PublishingDate = episode.PublishingDate
         };
     }

@@ -32,7 +32,8 @@ public class PodcastFeedClient(HttpClient httpClient) : IPodcastFeedClient
                 episode.Id,
                 episode.Title,
                 episode.Description,
-                DateTime.Parse(episode.PubDate)
+                DateTime.Parse(episode.PubDate),
+                episode.Enclosure.Url
             ))
         );
 
