@@ -46,7 +46,6 @@ public class EpisodeReadStore(
         var nameFilter = GetNameFilter(name);
         var dateFilter = GetTimeRangeFilter(fromDate, toDate);
 
-        var combinedFilter = Builders<PodcastRecord>.Filter.And(nameFilter, dateFilter);
         return await GetEpisodesCore(nameFilter, dateFilter: dateFilter);
     }
 

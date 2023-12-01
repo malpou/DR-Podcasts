@@ -5,7 +5,7 @@ namespace DR.PodcastFeeds.Api.Extensions;
 
 public static class EpisodeExtensions
 {
-    public static EpisodesResponse ToResponse(this IEnumerable<Episode> episodes)
+    public static EpisodesResponse ToResponses(this IEnumerable<Episode> episodes)
     {
         var episodeList = episodes.ToList();
 
@@ -18,11 +18,14 @@ public static class EpisodeExtensions
             episodeList.Select(e => e.ToResponse()).ToList());
     }
 
-    private static EpisodeResponse ToResponse(this Episode episode)
+    public static EpisodeResponse ToResponse(this Episode episode, string? podcastTitle = null,
+        string? podcastImageUrl = null)
     {
-        return new EpisodeResponse(
-            episode.Title,
-            episode.PublishingDate,
-            episode.Description);
+            return new EpisodeResponse(
+                episode.Title,
+                episode.PublishingDate,
+                episode.Description,
+                podcastTitle,
+                podcastImageUrl);
     }
 }

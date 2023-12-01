@@ -65,6 +65,10 @@ app.MapGet($"{podcastsPath}/{{name}}/{episodesPath}", EpisodesByPodcastEndpoint.
     .WithTags("Episodes")
     .WithDescription("Get episodes for a podcast")
     .Produces<EpisodesResponse>();
+app.MapGet($"{episodesPath}", EpisodesEndpoint.Handle)
+    .WithTags("Episodes")
+    .WithDescription("Get all episodes")
+    .Produces<List<EpisodeResponse>>();
 
 // Login Endpoints
 app.MapPost(loginPath, LoginEndpoint.Handle)
