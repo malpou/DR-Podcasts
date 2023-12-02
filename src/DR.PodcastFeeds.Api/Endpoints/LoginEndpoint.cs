@@ -11,8 +11,8 @@ public static class LoginEndpoint
     {
         var token = await sender.Send(new LoginCommand(credentials.Username, credentials.Password));
 
-        return token is null 
-            ? Results.Unauthorized() 
+        return token == null
+            ? Results.Unauthorized()
             : Results.Ok(new LoginResponse(token));
     }
 }

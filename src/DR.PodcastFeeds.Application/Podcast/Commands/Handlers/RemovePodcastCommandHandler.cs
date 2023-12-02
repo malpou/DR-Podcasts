@@ -14,7 +14,7 @@ public class RemovePodcastCommandHandler(
     {
         var podcastName = request.Name;
 
-        var exists = await podcastReadStore.Exists(podcastName);
+        var exists = await podcastReadStore.PodcastsExists(podcastName);
 
         if (!exists)
         {
@@ -22,7 +22,6 @@ public class RemovePodcastCommandHandler(
 
             return (false, "Podcast does not exist in the system");
         }
-
 
         var removed = await podcastWriteStore.Remove(podcastName);
 

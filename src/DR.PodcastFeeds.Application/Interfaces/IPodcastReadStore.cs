@@ -2,6 +2,6 @@
 
 public interface IPodcastReadStore
 {
-    Task<bool> Exists(string name);
+    Task<bool> PodcastsExists(string name);
     Task<IEnumerable<Domain.Podcast>> GetAll(string? category = null);
 }

@@ -30,7 +30,7 @@ public static class AuthExtensions
                 };
             });
     }
-    
+
     public static void AddAdminAuthorization(this IServiceCollection services)
     {
         services.AddAuthorizationBuilder()
@@ -44,7 +44,5 @@ public static class AuthExtensions
                     return user?.Value == "Admin";
                 });
             });
-
     }
-
 }

@@ -1,18 +1,13 @@
 ﻿using DR.PodcastFeeds.Application.Interfaces;
 using DR.PodcastFeeds.Domain;
 using DR.PodcastFeeds.Infrastructure.Stores.DbRecords;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace DR.PodcastFeeds.Infrastructure.Stores.Write;
 
-public class PodcastWriteStore(
-        IOptions<MongoDbSettings> settings,
-        ILogger<PodcastWriteStore> logger)
-    :
-        MongoDbStoreBase<PodcastRecord>(settings, settings.Value.PodcastCollectionName),
-        IPodcastWriteStore
+public class PodcastWriteStore(IOptions<MongoDbSettings> settings)
+    : MongoDbStoreBase<PodcastRecord>(settings, settings.Value.PodcastCollectionName), IPodcastWriteStore
 {
     public async Task<bool> Upsert(Podcast podcast)
     {
@@ -21,8 +16,6 @@ public class PodcastWriteStore(
 
         if (existingRecord != null && IsRecordChanged(existingRecord, record))
         {
-            logger.LogInformation("Updating podcast {PodcastName}", podcast.Name);
-
             record.Updated = DateTime.UtcNow;
             var filter = Builders<PodcastRecord>.Filter.Eq(p => p.Name, podcast.Name);
             var options = new ReplaceOptions {IsUpsert = true};
@@ -31,18 +24,11 @@ public class PodcastWriteStore(
             return true;
         }
 
-        if (existingRecord == null)
-        {
-            logger.LogInformation("Inserting podcast {PodcastName}", podcast.Name);
+        if (existingRecord != null) return false;
 
-            await Collection.InsertOneAsync(record);
+        await Collection.InsertOneAsync(record);
 
-            return true;
-        }
-
-        logger.LogInformation("Podcast {PodcastName} is up to date", podcast.Name);
-
-        return false;
+        return true;
     }
 
     public async Task<bool> Remove(string name)
@@ -54,12 +40,13 @@ public class PodcastWriteStore(
 
     private static bool IsRecordChanged(PodcastRecord existingRecord, PodcastRecord newRecord)
     {
-        return existingRecord.Title != newRecord.Title ||
-               existingRecord.Description != newRecord.Description ||
-               existingRecord.ImageUrl != newRecord.ImageUrl ||
-               existingRecord.Category != newRecord.Category ||
-               existingRecord.CategorySlug != newRecord.CategorySlug ||
-               existingRecord.Link != newRecord.Link ||
-               existingRecord.Episodes.Length != newRecord.Episodes.Length;
+        return newRecord.Episodes != null && existingRecord.Episodes != null &&
+               (existingRecord.Title != newRecord.Title ||
+                existingRecord.Description != newRecord.Description ||
+                existingRecord.ImageUrl != newRecord.ImageUrl ||
+                existingRecord.Category != newRecord.Category ||
+                existingRecord.CategorySlug != newRecord.CategorySlug ||
+                existingRecord.Link != newRecord.Link ||
+                existingRecord.Episodes.Length != newRecord.Episodes.Length);
     }
 }

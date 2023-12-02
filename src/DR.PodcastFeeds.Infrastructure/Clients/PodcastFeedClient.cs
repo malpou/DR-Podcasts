@@ -6,12 +6,6 @@ namespace DR.PodcastFeeds.Infrastructure.Clients;
 
 public class PodcastFeedClient(HttpClient httpClient) : IPodcastFeedClient
 {
-    public async Task<bool> PodcastExists(string name)
-    {
-        var response = await GetRssFeed(name);
-        return response.IsSuccessStatusCode;
-    }
-
     public async Task<Podcast?> GetPodcast(string name)
     {
         var response = await GetRssFeed(name);

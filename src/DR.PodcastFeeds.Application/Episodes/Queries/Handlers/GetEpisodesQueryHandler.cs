@@ -21,7 +21,7 @@ public class GetEpisodesQueryHandler(
 
         if (!string.IsNullOrWhiteSpace(podcastName))
         {
-            var exists = await podcastReadStore.Exists(podcastName);
+            var exists = await podcastReadStore.PodcastsExists(podcastName);
 
             if (!exists)
             {

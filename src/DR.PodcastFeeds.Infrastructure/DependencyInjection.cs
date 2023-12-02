@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using DR.PodcastFeeds.Application.Interfaces;
+﻿using DR.PodcastFeeds.Application.Interfaces;
 using DR.PodcastFeeds.Infrastructure.Auth;
 using DR.PodcastFeeds.Infrastructure.Clients;
 using DR.PodcastFeeds.Infrastructure.Managers;

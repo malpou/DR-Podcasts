@@ -2,35 +2,21 @@
 using DR.PodcastFeeds.Application.Interfaces;
 using DR.PodcastFeeds.Domain;
 using DR.PodcastFeeds.Infrastructure.Stores.DbRecords;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace DR.PodcastFeeds.Infrastructure.Stores.Read;
 
-public class PodcastReadStore(
-        IOptions<MongoDbSettings> settings,
-        ILogger<PodcastReadStore> logger)
-    :
-        MongoDbStoreBase<PodcastRecord>(settings, settings.Value.PodcastCollectionName),
-        IPodcastReadStore
+public class PodcastReadStore(IOptions<MongoDbSettings> settings)
+    : MongoDbStoreBase<PodcastRecord>(settings, settings.Value.PodcastCollectionName), IPodcastReadStore
 {
-    public async Task<bool> Exists(string name)
+    public async Task<bool> PodcastsExists(string name)
     {
         var filter = Builders<PodcastRecord>.Filter.Eq(podcast => podcast.Name, name);
 
         var podcast = await Collection.Find(filter).FirstOrDefaultAsync();
 
-        if (podcast == null)
-        {
-            logger.LogInformation("Podcast {PodcastName} does not exist", name);
-
-            return false;
-        }
-
-        logger.LogInformation("Podcast {PodcastName} exists", name);
-
-        return true;
+        return podcast != null;
     }
 
     public Task<IEnumerable<Podcast>> GetAll(string? category = null)

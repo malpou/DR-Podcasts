@@ -2,17 +2,14 @@
 using DR.PodcastFeeds.Application.Interfaces;
 using DR.PodcastFeeds.Domain;
 using DR.PodcastFeeds.Infrastructure.Stores.DbRecords;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace DR.PodcastFeeds.Infrastructure.Stores.Read;
 
-public class EpisodeReadStore(
-    IOptions<MongoDbSettings> settings,
-    ILogger<EpisodeReadStore> logger) : MongoDbStoreBase<PodcastRecord>(settings, settings.Value.PodcastCollectionName),
-    IEpisodeReadStore
+public class EpisodeReadStore(IOptions<MongoDbSettings> settings)
+    : MongoDbStoreBase<PodcastRecord>(settings, settings.Value.PodcastCollectionName), IEpisodeReadStore
 {
     private static readonly BsonDocument EpisodeRecordProjection = new()
     {
@@ -81,16 +78,12 @@ public class EpisodeReadStore(
         return ProcessEpisodes(episodes);
     }
 
-    private IEnumerable<Episode> ProcessEpisodes(IEnumerable<EpisodeRecord>? episodes)
+    private static IEnumerable<Episode> ProcessEpisodes(IEnumerable<EpisodeRecord>? episodes)
     {
         var episodeRecords = episodes?.ToList();
-        if (episodeRecords == null || episodeRecords.Count == 0)
-        {
-            logger.LogInformation("No episodes found");
-            return Enumerable.Empty<Episode>();
-        }
 
-        logger.LogInformation("Found {EpisodeCount} episodes", episodeRecords.Count);
+        if (episodeRecords == null || episodeRecords.Count == 0) return Enumerable.Empty<Episode>();
+
         return episodeRecords.Select(episode => episode.ToDomain(episode.Podcast));
     }
 

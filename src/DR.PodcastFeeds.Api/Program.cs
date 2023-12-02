@@ -26,32 +26,23 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+  /*  c.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme()
     {
-        Description = """
-                      JWT Authorization header using the Bearer scheme.
-                      Enter 'Bearer' [space] and then your token in the text input below.
-                      Example: 'Bearer 12345abcdef'
-                      """,
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        Description = "Input bearer token to access this API",
     });
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
             new OpenApiSecurityScheme
             {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
+                Reference = new OpenApiReference {Type = ReferenceType.SecurityScheme, Id = "bearerAuth"}
             },
-            Array.Empty<string>()
+            new[] {"DemoSwaggerDifferentAuthScheme"}
         }
     });
+    c.OperationFilter<SecurityRequirementsOperationFilter>(); */
 });
 
 var app = builder.Build();

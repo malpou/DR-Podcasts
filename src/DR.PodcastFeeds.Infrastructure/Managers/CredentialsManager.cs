@@ -17,9 +17,9 @@ public class CredentialsManager(ISecretsService secretsService) : ICredentialsMa
     public async Task<bool> UsernameExists(string username)
     {
         var password = await secretsService.GetHashedPassword(username);
-        
+
         var exists = !string.IsNullOrEmpty(password);
-        
+
         return exists;
     }
 

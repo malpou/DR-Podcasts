@@ -17,7 +17,7 @@ public class LoginCommandHandler(
 
         var validCredentials = await credentialsManager.VerifyCredentials(username, password);
 
-        if (validCredentials is false)
+        if (validCredentials == false)
         {
             logger.LogWarning("Invalid credentials for user {Username}", username);
 

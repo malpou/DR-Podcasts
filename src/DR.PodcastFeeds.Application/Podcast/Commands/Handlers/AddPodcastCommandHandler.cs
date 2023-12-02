@@ -1,11 +1,13 @@
-﻿using Hangfire;
+﻿using DR.PodcastFeeds.Application.Interfaces;
+using Hangfire;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace DR.PodcastFeeds.Application.Podcast.Commands.Handlers;
 
 public class AddPodcastCommandHandler(
-    ISender sender,
+    IPodcastReadStore podcastReadStore,
+    IPodcastFeedClient podcastClient,
     IBackgroundJobClient backgroundJob,
     ILogger<AddPodcastCommandHandler> logger
 ) : IRequestHandler<AddPodcastCommand, (bool, string)>
@@ -17,18 +19,25 @@ public class AddPodcastCommandHandler(
     {
         var podcastName = request.Name;
 
-        var validateNameCommand = new ValidatePodcastNameCommand(podcastName);
-        var isValid = await sender.Send(validateNameCommand, cancellationToken);
+        var exists = await podcastReadStore.PodcastsExists(podcastName);
 
-        if (!isValid)
+        if (exists)
         {
-            logger.LogWarning("Podcast name ({PodcastName}) is not valid or already exists", podcastName);
+            logger.LogWarning("Podcast ({PodcastName}) already exists in system", podcastName);
 
-            return (false, "Podcast name  is not valid or already exists");
+            return (false, "Podcast already exists in system");
         }
 
-        var loadPodcastCommand = new LoadPodcastCommand(podcastName);
-        backgroundJob.Enqueue<ISender>(x => x.Send(loadPodcastCommand, cancellationToken));
+        var podcast = await podcastClient.GetPodcast(podcastName);
+
+        if (podcast == null)
+        {
+            logger.LogWarning("Podcast ({PodcastName}) does not exist in DRs system", podcastName);
+
+            return (false, "Podcast does not exist in DRs system");
+        }
+
+        backgroundJob.Enqueue<ISender>(x => x.Send(new LoadPodcastCommand(podcast), cancellationToken));
 
         logger.LogInformation("Podcast ({Podcast}) added to system", podcastName);
 

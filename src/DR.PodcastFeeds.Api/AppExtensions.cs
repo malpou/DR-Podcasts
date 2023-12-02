@@ -29,14 +29,14 @@ public static class AppExtensions
             .Produces<List<PodcastResponse>>()
             .Produces(204)
             .WithOpenApi();
-        
+
         app.MapGet($"{CategoriesPath}/{{category}}/{PodcastsPath}", PodcastsByCategoryEndpoint.Handle)
             .WithTags("Podcasts")
             .WithDescription("Get all podcasts by category")
             .Produces<List<PodcastResponse>>()
             .Produces(204)
             .WithOpenApi();
-        
+
         app.MapPost(PodcastsPath, AddPodcastEndpoint.Handle)
             .RequireAuthorization("Admin")
             .WithTags("Podcasts")
@@ -45,7 +45,7 @@ public static class AppExtensions
             .Produces(401)
             .WithDescription("Add a podcast")
             .WithOpenApi();
-        
+
         app.MapDelete(PodcastsPath, DeletePodcastEndpoint.Handle)
             .RequireAuthorization("Admin")
             .WithTags("Podcasts")
@@ -63,7 +63,7 @@ public static class AppExtensions
             .Produces(204)
             .WithDescription("Get episodes for a podcast")
             .WithOpenApi();
-        
+
         app.MapGet($"{EpisodesPath}", EpisodesEndpoint.Handle)
             .WithTags("Episodes")
             .WithDescription("Get all episodes")
@@ -80,23 +80,21 @@ public static class AppExtensions
             .Produces(400)
             .WithDescription("Login as admin")
             .WithOpenApi();
-        
+
         // Register Endpoints
         if (app.Environment.IsDevelopment())
-        {
             app.MapPost(RegisterPath, RegisterAdminEndpoint.Handle)
                 .WithTags("Admin")
                 .Produces(201)
                 .Produces(400)
                 .WithDescription("Register as admin")
                 .WithOpenApi();
-        }
     }
-    
+
     public static void AddScheduler(this WebApplication app)
     {
         using var scope = app.Services.CreateScope();
         var podcastUpdateScheduler = scope.ServiceProvider.GetRequiredService<PodcastUpdateScheduler>();
-        podcastUpdateScheduler.SchedulePodcastUpdates();
+        podcastUpdateScheduler.SchedulePodcastsUpdates();
     }
 }

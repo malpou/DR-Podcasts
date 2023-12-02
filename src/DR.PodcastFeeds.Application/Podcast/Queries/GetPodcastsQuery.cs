@@ -2,4 +2,4 @@
 
 namespace DR.PodcastFeeds.Application.Podcast.Queries;
 
-public record GetPodcastsQuery(string? category = null) : IRequest<IEnumerable<Domain.Podcast>>;
+public record GetPodcastsQuery(string? Category = null) : IRequest<IEnumerable<Domain.Podcast>>;

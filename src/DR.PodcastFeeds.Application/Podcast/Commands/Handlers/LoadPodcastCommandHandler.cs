@@ -12,7 +12,7 @@ public class LoadPodcastCommandHandler(
 {
     public async Task Handle(LoadPodcastCommand request, CancellationToken cancellationToken)
     {
-        var podcastName = request.Name;
+        var podcastName = request.Podcast.Name;
 
         var podcast = await podcastClient.GetPodcast(podcastName);
 

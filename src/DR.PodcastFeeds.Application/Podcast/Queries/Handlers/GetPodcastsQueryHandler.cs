@@ -10,9 +10,9 @@ public class GetPodcastsQueryHandler
 {
     public async Task<IEnumerable<Domain.Podcast>> Handle(GetPodcastsQuery request, CancellationToken cancellationToken)
     {
-        var category = request.category;
+        var category = request.Category;
 
-        if (category is null)
+        if (category == null)
             logger.LogInformation("Getting all podcasts");
         else
             logger.LogInformation("Getting podcasts in category {Category}", category);

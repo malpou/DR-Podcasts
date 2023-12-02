@@ -11,9 +11,9 @@ public static class PodcastsEndpoint
         var podcasts = await sender.Send(new GetPodcastsQuery());
 
         var podcastsList = podcasts.ToList();
-        
-        return podcastsList.Any() 
-            ? Results.Ok(podcastsList.ToResponses()) 
+
+        return podcastsList.Any()
+            ? Results.Ok(podcastsList.ToResponses())
             : Results.NoContent();
     }
 }

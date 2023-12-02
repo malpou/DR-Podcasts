@@ -2,4 +2,4 @@
 
 namespace DR.PodcastFeeds.Application.Podcast.Commands;
 
-public record LoadPodcastCommand(string Name) : IRequest;
+public record LoadPodcastCommand(Domain.Podcast Podcast) : IRequest;

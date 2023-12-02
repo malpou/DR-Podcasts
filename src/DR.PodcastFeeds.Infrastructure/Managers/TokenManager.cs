@@ -13,7 +13,7 @@ public class TokenManager(ISecretsService secretsService) : ITokenManager
     {
         var claims = new[]
         {
-            new Claim(ClaimTypes.Name, username),
+            new Claim(ClaimTypes.Name, username)
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();
