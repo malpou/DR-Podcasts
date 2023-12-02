@@ -11,6 +11,6 @@ public static class RegisterAdminEndpoint
     {
         var result = await sender.Send(new AddAdminCredentialsCommand(credentials.Username, credentials.Password));
 
-        return result ? Results.Ok() : Results.BadRequest();
+        return result ? Results.Created() : Results.BadRequest();
     }
 }

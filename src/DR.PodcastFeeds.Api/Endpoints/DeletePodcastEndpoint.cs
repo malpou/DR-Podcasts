@@ -12,6 +12,6 @@ public class DeletePodcastEndpoint
 
         var (result, message) = await sender.Send(command);
 
-        return result ? Results.Ok(message) : Results.NotFound(message);
+        return result ? Results.NoContent() : Results.NotFound(message);
     }
 }

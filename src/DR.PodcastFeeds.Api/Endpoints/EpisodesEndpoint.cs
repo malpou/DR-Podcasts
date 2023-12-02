@@ -34,8 +34,8 @@ public static class EpisodesEndpoint
 
         var episodesList = episodes.ToList();
 
-        return !episodesList.Any()
-            ? Results.NotFound()
-            : Results.Ok(episodesList.Select(e => e.ToResponse(e.Podcast?.Title, e.Podcast?.ImageUrl)));
+        return episodesList.Any()
+            ? Results.Ok(episodesList.Select(e => e.ToResponse(e.Podcast?.Title, e.Podcast?.ImageUrl)))
+            : Results.NoContent();
     }
 }

@@ -10,6 +10,11 @@ public static class CategoriesEndpoint
     {
         var categories = await sender.Send(new GetCategoriesQuery());
 
-        return Results.Ok(categories.ToResponses());
+        var categoriesList = categories.ToList();
+        
+        return categoriesList.Any() 
+            ? Results.Ok(categoriesList.ToResponses()) 
+            : Results.NoContent();
+
     }
 }

@@ -11,6 +11,8 @@ public static class PodcastsByCategoryEndpoint
     {
         var podcasts = await sender.Send(new GetPodcastsQuery(category));
 
-        return Results.Ok(podcasts.ToResponses());
+        var podcastsList = podcasts.ToList();
+
+        return podcastsList.Any() ? Results.Ok(podcastsList.ToResponses()) : Results.NotFound();
     }
 }

@@ -12,6 +12,6 @@ public static class AddPodcastEndpoint
 
         var (result, message) = await sender.Send(command);
 
-        return result ? Results.Ok(message) : Results.BadRequest(message);
+        return result ? Results.Created("podcasts/" + name, message) : Results.BadRequest(message);
     }
 }
