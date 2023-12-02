@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DR.PodcastFeeds.Api.Endpoints;
 
-public static class RegisterAdminEndpoints
+public static class RegisterAdminEndpoint
 {
     public static async Task<IResult> Handle([FromBody] AdminCredentials credentials, ISender sender)
     {
