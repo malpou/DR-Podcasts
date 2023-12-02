@@ -16,7 +16,7 @@ public class PodcastUpdateScheduler(
     {
         recurringJob.AddOrUpdate("podcasts-update-job",
             () => ReloadPodcasts(),
-            Cron.Minutely);
+            "*/15 * * * *");
     }
 
     // Have to be public for Hangfire to be able to call it
@@ -26,7 +26,7 @@ public class PodcastUpdateScheduler(
 
         foreach (var podcast in podcasts)
         {
-            var loadPodcastCommand = new LoadPodcastCommand(podcast);
+            var loadPodcastCommand = new LoadPodcastCommand(podcast, true);
             var jobId = backgroundJob.Enqueue<ISender>(x => x.Send(loadPodcastCommand, default));
 
             logger.LogInformation("Podcast ({PodcastName}) added to queue with job id ({JobId})", podcast.Name,

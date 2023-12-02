@@ -13,25 +13,37 @@ public class LoadPodcastCommandHandler(
     public async Task Handle(LoadPodcastCommand request, CancellationToken cancellationToken)
     {
         var podcastName = request.Podcast.Name;
-
-        var podcast = await podcastClient.GetPodcast(podcastName);
-
-        if (podcast == null)
+        var reload = request.Reload;
+        
+        if (reload)
         {
-            logger.LogCritical("Podcast ({PodcastName}) does not exist in DRs system", podcastName);
+            logger.LogInformation("Reloading podcast ({PodcastName}) from DRs system", podcastName);
+            
+            var newestPodcast = await podcastClient.GetPodcast(podcastName);
 
-            return;
+            if (newestPodcast == null)
+            {
+                logger.LogCritical("Podcast ({PodcastName}) does not exist in DRs system", podcastName);
+
+                return;
+            }
+            
+            var changed = await podcastWriteStore.Upsert(newestPodcast);
+
+            if (changed)
+            {
+                logger.LogInformation("Podcast ({PodcastName}) loaded/reloaded to the system", podcastName);
+
+                return;
+            }
+            
+            logger.LogInformation("Podcast ({PodcastName}) is already up to date", podcastName);
         }
-
-        var changed = await podcastWriteStore.Upsert(podcast);
-
-        if (changed)
+        else
         {
-            logger.LogInformation("Podcast ({PodcastName}) loaded/reloaded to the system", podcastName);
-
-            return;
+            logger.LogInformation("Initial load of podcast ({PodcastName}) from DRs system", podcastName);
+            
+            await podcastWriteStore.Upsert(request.Podcast);
         }
-
-        logger.LogInformation("Podcast ({PodcastName}) is already up to date", podcastName);
     }
 }

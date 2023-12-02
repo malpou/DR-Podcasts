@@ -37,7 +37,7 @@ public class AddPodcastCommandHandler(
             return (false, "Podcast does not exist in DRs system");
         }
 
-        backgroundJob.Enqueue<ISender>(x => x.Send(new LoadPodcastCommand(podcast), cancellationToken));
+        backgroundJob.Enqueue<ISender>(x => x.Send(new LoadPodcastCommand(podcast, false), cancellationToken));
 
         logger.LogInformation("Podcast ({Podcast}) added to system", podcastName);
 
