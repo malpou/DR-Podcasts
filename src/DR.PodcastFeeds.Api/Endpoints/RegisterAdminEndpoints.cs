@@ -5,14 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DR.PodcastFeeds.Api.Endpoints;
 
-public static class LoginEndpoint
+public static class RegisterAdminEndpoints
 {
     public static async Task<IResult> Handle([FromBody] AdminCredentials credentials, ISender sender)
     {
-        var token = await sender.Send(new LoginCommand(credentials.Username, credentials.Password));
+        var result = await sender.Send(new AddAdminCredentialsCommand(credentials.Username, credentials.Password));
 
-        return token is null 
-            ? Results.Unauthorized() 
-            : Results.Ok(new LoginResponse(token));
+        return result ? Results.Ok() : Results.BadRequest();
     }
 }

@@ -1,5 +1,9 @@
-﻿using DR.PodcastFeeds.Application.Interfaces;
+﻿using System.Security.Claims;
+using DR.PodcastFeeds.Application.Interfaces;
+using DR.PodcastFeeds.Infrastructure.Auth;
 using DR.PodcastFeeds.Infrastructure.Clients;
+using DR.PodcastFeeds.Infrastructure.Managers;
+using DR.PodcastFeeds.Infrastructure.Services;
 using DR.PodcastFeeds.Infrastructure.Stores;
 using DR.PodcastFeeds.Infrastructure.Stores.Read;
 using DR.PodcastFeeds.Infrastructure.Stores.Write;
@@ -15,13 +19,18 @@ public static class DependencyInjection
 {
     public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddServices();
+        services.AddServices(configuration);
         services.AddPersistence(configuration);
+        services.AddJwtAuthentication();
+        services.AddAdminAuthorization();
     }
 
-    private static void AddServices(this IServiceCollection services)
+    private static void AddServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHttpClient<IPodcastFeedClient, PodcastFeedClient>();
+        services.AddSingleton<ISecretsService>(_ => new SecretsService(configuration.GetConnectionString("KeyVault")!));
+        services.AddSingleton<ICredentialsManager, CredentialsManager>();
+        services.AddSingleton<ITokenManager, TokenManager>();
     }
 
     private static void AddPersistence(this IServiceCollection services, IConfiguration configuration)

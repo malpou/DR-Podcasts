@@ -12,7 +12,7 @@ public class EpisodeRecord
     public string Description { get; set; } = null!;
 
     public DateTime PublishingDate { get; set; }
-    
+
     public string AudioUrl { get; set; } = null!;
 
     [BsonIgnoreIfNull] public PodcastRecord? Podcast { get; set; } = null!;

@@ -50,15 +50,17 @@ public class Item
     public string Description { get; set; } = null!;
 
     [XmlElement(ElementName = "pubDate")] public string PubDate { get; set; } = null!;
-    
-    [XmlElement(ElementName = "enclosure")] public Enclosure Enclosure { get; set; } = null!;
+
+    [XmlElement(ElementName = "enclosure")]
+    public Enclosure Enclosure { get; set; } = null!;
 }
 
 public class Enclosure
 {
     [XmlAttribute(AttributeName = "url")] public string Url { get; set; } = null!;
 
-    [XmlAttribute(AttributeName = "length")] public string Length { get; set; } = null!;
+    [XmlAttribute(AttributeName = "length")]
+    public string Length { get; set; } = null!;
 
     [XmlAttribute(AttributeName = "type")] public string Type { get; set; } = null!;
 }

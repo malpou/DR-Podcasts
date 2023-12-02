@@ -21,12 +21,12 @@ public static class EpisodeExtensions
     public static EpisodeResponse ToResponse(this Episode episode, string? podcastTitle = null,
         string? podcastImageUrl = null)
     {
-            return new EpisodeResponse(
-                episode.Title,
-                episode.PublishingDate,
-                episode.Description,
-                episode.AudioUrl,
-                podcastTitle,
-                podcastImageUrl);
+        return new EpisodeResponse(
+            episode.Title,
+            episode.PublishingDate,
+            episode.Description,
+            episode.AudioUrl,
+            podcastTitle,
+            podcastImageUrl);
     }
 }

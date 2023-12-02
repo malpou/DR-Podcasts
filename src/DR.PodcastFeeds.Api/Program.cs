@@ -6,36 +6,44 @@ using DR.PodcastFeeds.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AnyOriginAndAuthorization", x => x
-        .AllowAnyOrigin()
-        .AllowAnyMethod()
-        .WithHeaders("Authorization", "Content-Type"));
-});
+builder.Services.AddProblemDetails();
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
-var app = builder.Build();
-
-app.UseCors("AnyOriginAndAuthorization");
-
-if (app.Environment.IsDevelopment())
+builder.Services.AddCors(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    options.AddPolicy("DevPolicy", x => x
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .WithHeaders("Authorization", "Content-Type"));
 
+    options.AddPolicy("ProdPolicy", x => x
+        .WithOrigins("https://podcasts.malpou.dev", "https://dr-podcasts.vercel.app/")
+        .WithMethods("GET", "POST", "DELETE")
+        .WithHeaders("Authorization", "Content-Type"));
+});
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+
+var app = builder.Build();
 app.UseHttpsRedirection();
+
+app.UseCors(app.Environment.IsDevelopment() ? "DevPolicy" : "ProdPolicy");
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 // Endpoints
 const string categoriesPath = "categories";
 const string podcastsPath = "podcasts";
 const string episodesPath = "episodes";
+const string registerPath = "register";
 const string loginPath = "login";
 
 // Categories Endpoints
@@ -54,10 +62,10 @@ app.MapGet($"{categoriesPath}/{{category}}/{podcastsPath}", PodcastsByCategoryEn
     .WithDescription("Get all podcasts by category")
     .Produces<List<PodcastResponse>>();
 app.MapPost(podcastsPath, AddPodcastEndpoint.Handle)
-    //.RequireAuthorization("Admin")
+    .RequireAuthorization("Admin")
     .WithTags("Podcasts");
 app.MapDelete(podcastsPath, DeletePodcastEndpoint.Handle)
-    //.RequireAuthorization("Admin")
+    .RequireAuthorization("Admin")
     .WithTags("Podcasts");
 
 // Episodes Endpoints
@@ -72,8 +80,13 @@ app.MapGet($"{episodesPath}", EpisodesEndpoint.Handle)
 
 // Login Endpoints
 app.MapPost(loginPath, LoginEndpoint.Handle)
-    .WithTags("Login");
+    .WithTags("Admin")
+    .Produces<LoginResponse>();
+if (app.Environment.IsDevelopment())
+    app.MapPost(registerPath, RegisterAdminEndpoints.Handle)
+        .WithTags("Admin");
 
+// Scheduler
 using var scope = app.Services.CreateScope();
 var podcastUpdateScheduler = scope.ServiceProvider.GetRequiredService<PodcastUpdateScheduler>();
 podcastUpdateScheduler.SchedulePodcastUpdates();

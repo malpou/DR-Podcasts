@@ -29,11 +29,11 @@ public static class EpisodesEndpoint
             if (fromDate > toDate)
                 return Results.BadRequest("'from' must be before 'to'.");
         }
-        
+
         var episodes = await sender.Send(new GetEpisodesQuery(null, page, size, from, to, last));
-      
+
         var episodesList = episodes.ToList();
-        
+
         return !episodesList.Any()
             ? Results.NotFound()
             : Results.Ok(episodesList.Select(e => e.ToResponse(e.Podcast?.Title, e.Podcast?.ImageUrl)));
