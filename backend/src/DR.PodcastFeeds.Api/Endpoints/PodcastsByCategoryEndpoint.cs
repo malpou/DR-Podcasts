@@ -7,9 +7,9 @@ namespace DR.PodcastFeeds.Api.Endpoints;
 
 public static class PodcastsByCategoryEndpoint
 {
-    public static async Task<IResult> Handle([FromRoute] string category, ISender sender)
+    public static async Task<IResult> Handle([FromRoute] string categorySlug, ISender sender)
     {
-        var podcasts = await sender.Send(new GetPodcastsQuery(category));
+        var podcasts = await sender.Send(new GetPodcastsQuery(categorySlug));
 
         var podcastsList = podcasts.ToList();
 

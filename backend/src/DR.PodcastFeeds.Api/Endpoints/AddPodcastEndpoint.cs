@@ -6,12 +6,12 @@ namespace DR.PodcastFeeds.Api.Endpoints;
 
 public static class AddPodcastEndpoint
 {
-    public static async Task<IResult> Handle([FromRoute] string name, ISender sender)
+    public static async Task<IResult> Handle([FromRoute] string podcastSlug, ISender sender)
     {
-        var command = new AddPodcastCommand(name);
+        var command = new AddPodcastCommand(podcastSlug);
 
         var (result, message) = await sender.Send(command);
 
-        return result ? Results.Created("podcasts/" + name, message) : Results.BadRequest(message);
+        return result ? Results.Created("podcasts/" + podcastSlug, message) : Results.BadRequest(message);
     }
 }

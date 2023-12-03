@@ -29,13 +29,13 @@ public static class AppExtensions
             .Produces<List<PodcastResponse>>()
             .Produces(204);
 
-        app.MapGet($"{CategoriesPath}/{{category}}/{PodcastsPath}", PodcastsByCategoryEndpoint.Handle)
+        app.MapGet($"{CategoriesPath}/{{categorySlug}}/{PodcastsPath}", PodcastsByCategoryEndpoint.Handle)
             .WithTags("Podcasts")
             .WithDescription("Get all podcasts by category")
             .Produces<List<PodcastResponse>>()
             .Produces(204);
 
-        app.MapPost($"{PodcastsPath}/{{name}}", AddPodcastEndpoint.Handle)
+        app.MapPost($"{PodcastsPath}/{{podcastSlug}}", AddPodcastEndpoint.Handle)
             .RequireAuthorization("Admin")
             .WithBearerToken()
             .WithTags("Podcasts")
@@ -44,7 +44,7 @@ public static class AppExtensions
             .Produces(400)
             .Produces(401);
 
-        app.MapDelete($"{PodcastsPath}/{{name}}", DeletePodcastEndpoint.Handle)
+        app.MapDelete($"{PodcastsPath}/{{podcastSlug}}", DeletePodcastEndpoint.Handle)
             .RequireAuthorization("Admin")
             .WithBearerToken()
             .WithTags("Podcasts")
@@ -54,7 +54,7 @@ public static class AppExtensions
             .Produces(401);
 
         // Episodes Endpoints
-        app.MapGet($"{PodcastsPath}/{{name}}/{EpisodesPath}", EpisodesByPodcastEndpoint.Handle)
+        app.MapGet($"{PodcastsPath}/{{podcastSlug}}/{EpisodesPath}", EpisodesByPodcastEndpoint.Handle)
             .WithTags("Episodes")
             .WithDescription("Get episodes for a podcast")
             .Produces<EpisodesResponse>()

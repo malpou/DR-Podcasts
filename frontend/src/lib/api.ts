@@ -24,8 +24,8 @@ export async function login(password: string): Promise<string | null> {
   return null
 }
 
-export async function addPodcast(name: string, token: string): Promise<void> {
-  const response = await fetch(`${API_URL}/podcasts/${name}`, {
+export async function addPodcast(podcastSlug: string, token: string): Promise<void> {
+  const response = await fetch(`${API_URL}/podcasts/${podcastSlug}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -39,10 +39,10 @@ export async function addPodcast(name: string, token: string): Promise<void> {
 }
 
 export async function removePodcast(
-  slug: string,
+  podcastSlug: string,
   token: string
 ): Promise<void> {
-  const response = await fetch(`${API_URL}/podcasts/${slug}`, {
+  const response = await fetch(`${API_URL}/podcasts/${podcastSlug}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,

@@ -8,7 +8,7 @@ namespace DR.PodcastFeeds.Api.Endpoints;
 public static class EpisodesByPodcastEndpoint
 {
     public static async Task<IResult> Handle(
-        [FromRoute] string name,
+        [FromRoute] string podcastSlug,
         [FromQuery] int? page,
         [FromQuery] int? size,
         [FromQuery] DateOnly? from,
@@ -23,7 +23,7 @@ public static class EpisodesByPodcastEndpoint
         if ((from.HasValue && !to.HasValue) || (!from.HasValue && to.HasValue))
             return Results.BadRequest("Both 'from' and 'to' parameters must be provided together.");
 
-        var episodes = await sender.Send(new GetEpisodesQuery(name, page, size, from, to, last));
+        var episodes = await sender.Send(new GetEpisodesQuery(podcastSlug, page, size, from, to, last));
 
         var episodesList = episodes.ToList();
         return episodesList.Any()

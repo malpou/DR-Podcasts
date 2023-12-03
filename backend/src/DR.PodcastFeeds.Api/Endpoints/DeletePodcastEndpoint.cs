@@ -6,9 +6,9 @@ namespace DR.PodcastFeeds.Api.Endpoints;
 
 public static class DeletePodcastEndpoint
 {
-    public static async Task<IResult> Handle([FromRoute] string name, ISender sender)
+    public static async Task<IResult> Handle([FromRoute] string podcastSlug, ISender sender)
     {
-        var command = new RemovePodcastCommand(name);
+        var command = new RemovePodcastCommand(podcastSlug);
 
         var (result, message) = await sender.Send(command);
 
