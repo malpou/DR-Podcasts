@@ -16,26 +16,21 @@ public static class EpisodesEndpoint
         ISender sender
     )
     {
-        if ((page.HasValue && !size.HasValue) || (!page.HasValue && size.HasValue))
-            return Results.BadRequest("Both 'page' and 'size' parameters must be provided together.");
-
-        if ((from.HasValue && !to.HasValue) || (!from.HasValue && to.HasValue))
-            return Results.BadRequest("Both 'from' and 'to' parameters must be provided together.");
-
-        if (from.HasValue && to.HasValue)
-        {
-            var fromDate = from.Value;
-            var toDate = to.Value;
-            if (fromDate > toDate)
-                return Results.BadRequest("'from' must be before 'to'.");
-        }
+        var validationResult = EndpointValidationHelper.ValidateCommonParameters(page, size, from, to, last);
+        if (validationResult is not null)
+            return validationResult;
 
         var episodes = await sender.Send(new GetEpisodesQuery(null, page, size, from, to, last));
 
+        if (episodes is null)
+            return Results.NotFound();
+        
         var episodesList = episodes.ToList();
 
         return episodesList.Any()
-            ? Results.Ok(episodesList.Select(e => e.ToResponse(e.Podcast?.Title, e.Podcast?.ImageUrl)))
+            ? Results.Ok(episodesList.Select(e => e.ToResponse(
+                e.Podcast?.Title ?? "Podcast title not found", 
+                e.Podcast?.ImageUrl ?? "Podcast image url not found")))
             : Results.NoContent();
     }
 }

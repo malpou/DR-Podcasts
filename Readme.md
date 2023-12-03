@@ -1,24 +1,25 @@
-## Functionality
+# DR Coding Test
 
-### Endpoints
-- Get categories
-    - `GET /categories`
-- Discovery endpoints that shows what podcasts are available in the system
-    - `GET /podcasts` - list all podcasts
-    -  Get podcasts by category id or slug
-        - `GET /categories/{slug/id}/podcasts`
-- List all episodes for a given podcast based on a podcast id or slug
-    - `GET /podcasts/{slug/id}/episodes`
-    - This endpoint should support date filtering (iso format YYYY-MM-DD)
-      - `GET /podcasts/{slug/id}/episodes?from=2020-01-01&to=2020-01-31`
-    - This endpoint should support receiving the last N episodes
-      - `GET /podcasts/{slug/id}/episodes?last=10`
-    - This endpoint should support pagination
-      - `GET /podcasts/{slug/id}/episodes?page=0&size=10`
-- Admin endpoints that allows to add/remove rss podcast feeds to the system (authentication required)
-  - `POST /feed?rssUrl=https://api.dr.dk/podcasts/v1/feeds/orientering` - add new podcast (needs to validate that the rss feed is valid)
-  - `DELETE /feed?rssUrl=https://api.dr.dk/podcasts/v1/feeds/orientering` - remove podcast
+## Assignment
+The task is to build a REST API that exposes data from our existing podcast feeds at DR, with the following requirements. You are very welcome to justify any choices or rejections, in case you do not complete everything.
+- It should be able to expose JSON data for a podcast feed based on a given name/id, e.g., "tiden" or "orientering".
+- For a podcast feed, at a minimum, it should expose the title, description, link, category, and contained items (episodes).
+- For each item, at a minimum, it should expose the id (guid), title, description, and publication date.
+- It should be able to filter podcast feed items so that only items from a given publication date (pubDate) onwards are exposed.
+- It should be able to limit how many items are exposed for the given podcast feed.
+- We would like to see an example of a unit test.
+
+### Examples of podcast feeds:
+- https://api.dr.dk/podcasts/v1/feeds/tiden.xml?limit=500
+- https://api.dr.dk/podcasts/v1/feeds/orientering.xml?limit=10
+
+More podcasts can be found here: https://www.dr.dk/lyd, and you can find the actual podcast feed by clicking into a given podcast and selecting "RSS".
 
 
-### Timed jobs
-- Fetching new episodes from the rss feeds in the system every 15 minutes
+## Solution
+The rest API is implemented in .Net 8 using C# and following the . The solution is divided into 5 source projects:
+- DR.PodcastFeeds.Api: The REST API (built on minimal APIs)
+- DR.PodcastFeeds.Domain: The domain class models
+- DR.PodcastFeeds.Infrastructure: The infrastructure layer
+- DR.PodcastFeeds.Contracts: The contracts for the REST API
+- DR.PodcastFeeds.Application: The application layer ()

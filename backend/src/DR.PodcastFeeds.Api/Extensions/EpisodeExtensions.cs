@@ -21,6 +21,7 @@ public static class EpisodeExtensions
     private static EpisodeResponse ToResponse(this Episode episode)
     {
         return new EpisodeResponse(
+            episode.Id,
             episode.Title,
             episode.PublishingDate,
             episode.Description,
@@ -30,6 +31,7 @@ public static class EpisodeExtensions
     public static EpisodeWithPodcastInfoResponse ToResponse(this Episode episode, string podcastTitle, string podcastImageUrl)
     {
         return new EpisodeWithPodcastInfoResponse(
+            episode.Id,
             episode.Title,
             episode.PublishingDate,
             episode.Description,
