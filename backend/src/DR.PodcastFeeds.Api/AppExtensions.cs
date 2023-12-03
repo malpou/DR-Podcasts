@@ -1,7 +1,6 @@
 ﻿using DR.PodcastFeeds.Api.Endpoints;
 using DR.PodcastFeeds.Application.Podcast.Jobs;
 using DR.PodcastFeeds.Contracts;
-using Microsoft.OpenApi.Models;
 
 namespace DR.PodcastFeeds.Api;
 
