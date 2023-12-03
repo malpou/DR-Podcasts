@@ -2,7 +2,7 @@
 using DR.PodcastFeeds.Application.Podcast.Commands;
 using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace DR.PodcastFeeds.Api.Tests.FeedSpecifications;
+namespace DR.PodcastFeeds.Api.Tests.AdminSpecifications;
 
 public class Post
 {
