@@ -20,9 +20,4 @@
     max-width: 25em;
     max-height: 25em;
   }
-
-  b {
-    margin-top: 0.25em;
-    font-size: 1.25em;
-  }
 </style>
