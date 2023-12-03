@@ -27,7 +27,7 @@ public static class SwaggerExtensions
 
             return operation;
         });
-        
+
         return builder;
     }
 }

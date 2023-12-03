@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using DR.PodcastFeeds.Application.Interfaces;
+﻿using DR.PodcastFeeds.Application.Interfaces;
 using DR.PodcastFeeds.Domain;
 using DR.PodcastFeeds.Infrastructure.Stores.DbRecords;
 using Microsoft.Extensions.Options;
@@ -91,8 +90,8 @@ public class EpisodeReadStore(IOptions<MongoDbSettings> settings)
     {
         var filter = Builders<PodcastRecord>.Filter.Empty;
 
-        return string.IsNullOrWhiteSpace(name) 
-            ? filter 
+        return string.IsNullOrWhiteSpace(name)
+            ? filter
             : Builders<PodcastRecord>.Filter.Eq(podcast => podcast.Name, name);
     }
 

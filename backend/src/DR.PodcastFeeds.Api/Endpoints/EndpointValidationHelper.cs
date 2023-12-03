@@ -20,11 +20,11 @@ public static class EndpointValidationHelper
             return Results.BadRequest("'page' must be greater than 0.");
 
         if (!from.HasValue || !to.HasValue) return null; // Indicates no validation errors
-        
+
         var fromDate = from.Value;
         var toDate = to.Value;
-        return fromDate > toDate 
-            ? Results.BadRequest("'from' must be before 'to'.") 
+        return fromDate > toDate
+            ? Results.BadRequest("'from' must be before 'to'.")
             : null; // Indicates no validation errors
     }
 }

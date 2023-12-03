@@ -14,11 +14,11 @@ public class LoadPodcastCommandHandler(
     {
         var podcastName = request.Podcast.Name;
         var reload = request.Reload;
-        
+
         if (reload)
         {
             logger.LogInformation("Reloading podcast ({PodcastName}) from DRs system", podcastName);
-            
+
             var newestPodcast = await podcastClient.GetPodcast(podcastName);
 
             if (newestPodcast == null)
@@ -27,7 +27,7 @@ public class LoadPodcastCommandHandler(
 
                 return;
             }
-            
+
             var changed = await podcastWriteStore.Upsert(newestPodcast);
 
             if (changed)
@@ -36,13 +36,13 @@ public class LoadPodcastCommandHandler(
 
                 return;
             }
-            
+
             logger.LogInformation("Podcast ({PodcastName}) is already up to date", podcastName);
         }
         else
         {
             logger.LogInformation("Initial load of podcast ({PodcastName}) from DRs system", podcastName);
-            
+
             await podcastWriteStore.Upsert(request.Podcast);
         }
     }

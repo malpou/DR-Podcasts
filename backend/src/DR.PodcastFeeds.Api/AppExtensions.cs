@@ -78,13 +78,11 @@ public static class AppExtensions
 
         // Register Endpoints
         if (app.Environment.IsDevelopment())
-        {
             app.MapPost(RegisterPath, RegisterAdminEndpoint.Handle)
                 .WithTags("Admin")
                 .WithDescription("Register as admin")
                 .Produces(201)
                 .Produces(400);
-        }
     }
 
     public static void AddScheduler(this WebApplication app)

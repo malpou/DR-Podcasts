@@ -24,12 +24,12 @@ public static class EpisodesEndpoint
 
         if (episodes is null)
             return Results.NotFound();
-        
+
         var episodesList = episodes.ToList();
 
         return episodesList.Any()
             ? Results.Ok(episodesList.Select(e => e.ToResponse(
-                e.Podcast?.Title ?? "Podcast title not found", 
+                e.Podcast?.Title ?? "Podcast title not found",
                 e.Podcast?.ImageUrl ?? "Podcast image url not found")))
             : Results.NoContent();
     }

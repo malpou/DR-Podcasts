@@ -27,8 +27,9 @@ public static class EpisodeExtensions
             episode.Description,
             episode.AudioUrl);
     }
-    
-    public static EpisodeWithPodcastInfoResponse ToResponse(this Episode episode, string podcastTitle, string podcastImageUrl)
+
+    public static EpisodeWithPodcastInfoResponse ToResponse(this Episode episode, string podcastTitle,
+        string podcastImageUrl)
     {
         return new EpisodeWithPodcastInfoResponse(
             episode.Id,
