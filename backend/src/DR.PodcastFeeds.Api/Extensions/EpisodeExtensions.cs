@@ -18,10 +18,18 @@ public static class EpisodeExtensions
             episodeList.Select(e => e.ToResponse()).ToList());
     }
 
-    public static EpisodeResponse ToResponse(this Episode episode, string? podcastTitle = null,
-        string? podcastImageUrl = null)
+    private static EpisodeResponse ToResponse(this Episode episode)
     {
         return new EpisodeResponse(
+            episode.Title,
+            episode.PublishingDate,
+            episode.Description,
+            episode.AudioUrl);
+    }
+    
+    public static EpisodeWithPodcastInfoResponse ToResponse(this Episode episode, string podcastTitle, string podcastImageUrl)
+    {
+        return new EpisodeWithPodcastInfoResponse(
             episode.Title,
             episode.PublishingDate,
             episode.Description,
