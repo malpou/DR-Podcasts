@@ -1,0 +1,60 @@
+@font-face {
+  font-family: "Geist Sans";
+  src: url("GeistVariableVF.woff2") format("woff2 supports variations");
+  font-weight: 100 1000;
+  font-stretch: 50% 200%;
+}
+
+:root {
+  --black: #333;
+  --red: #ff001e;
+  --white: #fff;
+}
+
+main {
+  font-family: "Geist Sans", sans-serif;
+  font-size: 1em;
+  line-height: 1.5;
+  color: var(--black);
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 1rem;
+
+  @media (min-width: 600px) {
+    font-size: 1.125rem;
+  }
+
+  @media (min-width: 800px) {
+    font-size: 1.25rem;
+  }
+
+  @media (min-width: 1000px) {
+    font-size: 1.5rem;
+  }
+
+  @media (min-width: 1200px) {
+    font-size: 1.75rem;
+  }
+
+  @media (min-width: 1400px) {
+    font-size: 2rem;
+  }
+}
+
+button {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+}
+
+button:focus {
+  outline: none;
+}
+
+a {
+  color: var(--black);
+}
