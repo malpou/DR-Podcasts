@@ -5,7 +5,7 @@ namespace DR.PodcastFeeds.Api.Extensions;
 
 public static class EpisodeExtensions
 {
-    public static EpisodesResponse ToResponses(this IEnumerable<Episode> episodes)
+    public static EpisodesResponse ToResponse(this IEnumerable<Episode> episodes)
     {
         var episodeList = episodes.ToList();
 

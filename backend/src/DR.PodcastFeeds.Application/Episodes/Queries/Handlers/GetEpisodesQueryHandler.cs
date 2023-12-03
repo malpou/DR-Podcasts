@@ -8,9 +8,9 @@ namespace DR.PodcastFeeds.Application.Episodes.Queries.Handlers;
 public class GetEpisodesQueryHandler(
     IEpisodeReadStore episodeReadStore,
     IPodcastReadStore podcastReadStore,
-    ILogger<GetEpisodesQueryHandler> logger) : IRequestHandler<GetEpisodesQuery, IEnumerable<Episode>>
+    ILogger<GetEpisodesQueryHandler> logger) : IRequestHandler<GetEpisodesQuery, IEnumerable<Episode>?>
 {
-    public async Task<IEnumerable<Episode>> Handle(GetEpisodesQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Episode>?> Handle(GetEpisodesQuery request, CancellationToken cancellationToken)
     {
         var podcastName = request.PodcastName;
         var pageNumber = request.PageNumber;
@@ -27,7 +27,7 @@ public class GetEpisodesQueryHandler(
             {
                 logger.LogInformation("Podcast {PodcastName} does not exist", podcastName);
 
-                return Enumerable.Empty<Episode>();
+                return null;
             }
         }
 

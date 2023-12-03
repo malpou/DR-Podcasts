@@ -58,13 +58,16 @@ public static class AppExtensions
             .WithTags("Episodes")
             .WithDescription("Get episodes for a podcast")
             .Produces<EpisodesResponse>()
-            .Produces(204);
+            .Produces(204)
+            .Produces(400)
+            .Produces(404);
 
         app.MapGet($"{EpisodesPath}", EpisodesEndpoint.Handle)
             .WithTags("Episodes")
             .WithDescription("Get all episodes")
             .Produces<List<EpisodeWithPodcastInfoResponse>>()
-            .Produces(204);
+            .Produces(204)
+            .Produces(400);
 
         // Login Endpoints
         app.MapPost(LoginPath, LoginEndpoint.Handle)
