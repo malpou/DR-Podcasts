@@ -8,7 +8,6 @@
 
 <button on:click={() => goto(link)}>
   <img src={image} alt={title} />
-  <b>Click the image to go to DR LYD</b>
 </button>
 
 <style>
