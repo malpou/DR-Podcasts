@@ -91,10 +91,9 @@ public class EpisodeReadStore(IOptions<MongoDbSettings> settings)
     {
         var filter = Builders<PodcastRecord>.Filter.Empty;
 
-        if (string.IsNullOrWhiteSpace(name)) return filter;
-
-        var regex = new Regex(name, RegexOptions.IgnoreCase);
-        return Builders<PodcastRecord>.Filter.Regex(podcast => podcast.Name, regex);
+        return string.IsNullOrWhiteSpace(name) 
+            ? filter 
+            : Builders<PodcastRecord>.Filter.Eq(podcast => podcast.Name, name);
     }
 
     private static BsonDocument GetTimeRangeFilter(DateOnly fromDate, DateOnly toDate)

@@ -6,7 +6,7 @@ namespace DR.PodcastFeeds.Api.Endpoints;
 
 public static class AddPodcastEndpoint
 {
-    public static async Task<IResult> Handle([FromQuery] string name, ISender sender)
+    public static async Task<IResult> Handle([FromRoute] string name, ISender sender)
     {
         var command = new AddPodcastCommand(name);
 

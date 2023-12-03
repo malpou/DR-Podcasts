@@ -35,7 +35,7 @@ public static class AppExtensions
             .Produces<List<PodcastResponse>>()
             .Produces(204);
 
-        app.MapPost(PodcastsPath, AddPodcastEndpoint.Handle)
+        app.MapPost($"{PodcastsPath}/{{name}}", AddPodcastEndpoint.Handle)
             .RequireAuthorization("Admin")
             .WithBearerToken()
             .WithTags("Podcasts")
@@ -44,7 +44,7 @@ public static class AppExtensions
             .Produces(400)
             .Produces(401);
 
-        app.MapDelete(PodcastsPath, DeletePodcastEndpoint.Handle)
+        app.MapDelete($"{PodcastsPath}/{{name}}", DeletePodcastEndpoint.Handle)
             .RequireAuthorization("Admin")
             .WithBearerToken()
             .WithTags("Podcasts")
