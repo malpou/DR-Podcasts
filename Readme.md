@@ -15,7 +15,7 @@ More podcasts can be found here: https://www.dr.dk/lyd, and you can find the act
 
 
 # Solution
-The Rest API is implemented in .Net 8 using C# and following the CLEAN architecture pattern. The solution is following Clean Architecture therefor divided into 5 source projects:
+The Rest API is implemented in .Net 8 using C#. The solution is following Clean Architecture therefor divided into 5 source projects:
 - DR.PodcastFeeds.Api: The REST API (built on minimal APIs acting as the presentation layer)
 - DR.PodcastFeeds.Domain: The domain class models (in this case the Podcast, Episode and Category classes)
 - DR.PodcastFeeds.Infrastructure: The infrastructure layer (in this case the MongoDB database and HttpClient)
@@ -27,6 +27,8 @@ The API specification is available at https://dr-podcasts.azurewebsites.net/swag
 
 ## Client application
 A client application that consumes the API is available at https://podcasts.malpou.dev/
+
+This is built using https://kit.svelte.dev/
 
 ## Categories
 The categories can be retrieved using a GET request to the `/categories` endpoint.
@@ -70,7 +72,7 @@ The solution is using the following packages:
 
 
 # Testing
-The application have been added unit tests for the fetcing of episodes to display how unit tests can be implemented. The unit tests can be found in the following projects:
+There have been added unit tests for the fetcing of episodes to display how unit tests can be implemented in a project like this. The unit tests can be found in the following projects:
 - DR.PodcastFeeds.Infrastructure.Tests
 - DR.PodcastFeeds.Application.Tests
 - DR.PodcastFeeds.Api.Tests
@@ -82,4 +84,4 @@ The solution is using the following testing frameworks:
 - **xUnit:** For unit testing.
 - **NSubstitute:** For mocking.
 - **FluentAssertions:** For assertions.
-- **Testcontainers.MongoDb:** For integration testing of the database.
+- **Testcontainers.MongoDb:** For integration testing of the database (running on Docker).
