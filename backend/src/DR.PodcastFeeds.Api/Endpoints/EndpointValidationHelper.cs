@@ -10,6 +10,15 @@ public static class EndpointValidationHelper
         if ((from.HasValue && !to.HasValue) || (!from.HasValue && to.HasValue))
             return Results.BadRequest("Both 'from' and 'to' parameters must be provided together.");
 
+        if (page.HasValue && size.HasValue && last.HasValue)
+            return Results.BadRequest("Only one of 'page' and 'last' parameters can be provided.");
+
+        if (from.HasValue && to.HasValue && last.HasValue)
+            return Results.BadRequest("Only one of 'from' and 'last' parameters can be provided.");
+
+        if (page.HasValue && size.HasValue && from.HasValue && to.HasValue)
+            return Results.BadRequest("Only one of 'page' and 'from' parameters can be provided.");
+
         if (size is < 1 or > 100)
             return Results.BadRequest("'size' must be between 1 and 100.");
 
