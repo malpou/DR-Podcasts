@@ -65,6 +65,11 @@ public class EpisodeReadStore(IOptions<MongoDbSettings> settings)
         var query = Collection.Aggregate()
             .Match(filter)
             .Unwind<PodcastRecord, EpisodeRecord>(podcast => podcast.Episodes)
+            .Sort(new BsonDocumentSortDefinition<EpisodeRecord>(new BsonDocument
+            {
+                {"Episodes.PublishingDate", -1},
+                {"Title", 1}
+            }))
             .Match(dateFilter ?? Builders<EpisodeRecord>.Filter.Empty)
             .Skip(skip);
 
@@ -75,6 +80,8 @@ public class EpisodeReadStore(IOptions<MongoDbSettings> settings)
         var episodes = await query.ToListAsync();
 
         return ProcessEpisodes(episodes);
+
+        //return ProcessEpisodes(episodes.OrderByDescending(e => e.PublishingDate));
     }
 
     private static IEnumerable<Episode> ProcessEpisodes(IEnumerable<EpisodeRecord>? episodes)
