@@ -23,10 +23,10 @@ The Rest API is implemented in .Net 8 using C#. The solution is following Clean 
 - DR.PodcastFeeds.Application: The application layer (implemented as a mediator pattern using MediatR)
 
 ## API Specification
-The API specification is available at https://dr-podcasts.azurewebsites.net/swagger
+The API specification is available at https://dr-podcasts.azurewebsites.net/swagger (currently disabled)
 
 ## Client application
-A client application that consumes the API is available at https://podcasts.malpou.dev/
+A client application that consumes the API is available at https://podcasts.malpou.dev/ (currently disabled)
 
 This is built using https://kit.svelte.dev/
 
